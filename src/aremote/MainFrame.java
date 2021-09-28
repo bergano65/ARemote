@@ -1,5 +1,19 @@
 package aremote;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.Timer;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,13 +24,25 @@ package aremote;
  *
  * @author Administrator
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements ActionListener, MouseListener
+{
 
+    private IDevice _device;
+    
+    private Timer _timer;
+    
+        
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        
+        _device = new AdbDevice();
+        _timer = new Timer(300, this);
+        _timer.start();
+        
+       jLabel1.addMouseListener(this);
     }
 
     /**
@@ -28,17 +54,32 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ARemote");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(800, 800));
+        setSize(new java.awt.Dimension(800, 800));
+
+        jLabel1.setText("jLabel1");
+        jLabel1.setName("pictureLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -72,13 +113,72 @@ public class MainFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
             }
         });
     }
 
+   public void actionPerformed(ActionEvent e) 
+   {
+       BufferedImage img = _device.getScreenShot();
+       
+       int lW = jLabel1.getWidth();
+       int lH = jLabel1.getHeight();
+       
+       double scaleX = ((double)lW)/(((double)img.getWidth()));
+       double scaleY = ((double)lH)/(((double)img.getHeight()));
+       
+       Image newImg = img.getScaledInstance(lW, lH, 0);
+       ImageIcon icon = new ImageIcon(newImg);
+       
+       jLabel1.setIcon(icon);
+   }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3)
+        {
+            Point p = ScalePoint(e.getPoint());
+            _device.touch(p.x, p.y);
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+    private Point ScalePoint(Point point)
+    {
+    
+      int lW = jLabel1.getWidth();
+       int lH = jLabel1.getHeight();
+       
+       double scaleX = ((double)lW)/(((double)_device.getWidth()));
+       double scaleY = ((double)lH)/(((double)_device.getHeight()));
+       
+       int scaledX = (int)(((double)point.x)/scaleX);
+       int scaledY = (int)(((double)point.y)/scaleY);
+       
+       return new Point(scaledX, scaledY);
+}
 }
