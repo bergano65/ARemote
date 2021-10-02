@@ -1,5 +1,7 @@
 package aremote;
 
+import com.android.chimpchat.core.PhysicalButton;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -12,6 +14,7 @@ import java.awt.image.BufferedImage;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.Timer;
 
 /*
@@ -30,19 +33,37 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
     private IDevice _device;
     
     private Timer _timer;
-    
-        
-    /**
+
+    private JButton _homeButton;
+
+    private JButton _backButton;
+
+     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
         
         _device = new AdbDevice();
-        _timer = new Timer(300, this);
+        _timer = new Timer(1000, this);
         _timer.start();
         
        jLabel1.addMouseListener(this);
+       
+       _homeButton = new JButton();
+       _homeButton.setText("Home");
+       _homeButton.setLocation(new Point(550, 70));
+       _homeButton.setSize(new Dimension(80, 40));
+       _homeButton.addActionListener(this);
+       this.add(_homeButton);
+
+
+       _backButton = new JButton();
+       _backButton.setText("Back");
+       _backButton.setLocation(new Point(550, 120));
+       _backButton.setSize(new Dimension(80, 40));
+       _backButton.addActionListener(this);
+       this.add(_backButton);
     }
 
     /**
@@ -59,7 +80,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ARemote");
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(800, 800));
         setSize(new java.awt.Dimension(800, 800));
 
         jLabel1.setText("jLabel1");
@@ -122,18 +142,39 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
 
    public void actionPerformed(ActionEvent e) 
    {
-       BufferedImage img = _device.getScreenShot();
+       var source = e.getSource();
        
-       int lW = jLabel1.getWidth();
-       int lH = jLabel1.getHeight();
-       
-       double scaleX = ((double)lW)/(((double)img.getWidth()));
-       double scaleY = ((double)lH)/(((double)img.getHeight()));
-       
-       Image newImg = img.getScaledInstance(lW, lH, 0);
-       ImageIcon icon = new ImageIcon(newImg);
-       
+       if (source == _timer)
+       {
+        BufferedImage img = _device.getScreenShot();
+
+        if (img == null)
+        {
+             return;
+        }
+
+        int lW = jLabel1.getWidth();
+        int lH = jLabel1.getHeight();
+
+        double scaleX = ((double)lW)/(((double)img.getWidth()));
+        double scaleY = ((double)lH)/(((double)img.getHeight()));
+
+        Image newImg = img.getScaledInstance(lW, lH, 0);
+        ImageIcon icon = new ImageIcon(newImg);
+
        jLabel1.setIcon(icon);
+       }
+       else if (source == _homeButton)
+       {
+           _device.press(PhysicalButton.HOME);
+           
+       }
+       else if (source == _backButton)
+       {
+           _device.press(PhysicalButton.BACK);
+           
+       }
+       
    }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,3 +223,4 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
        return new Point(scaledX, scaledY);
 }
 }
+
