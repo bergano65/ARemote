@@ -5,6 +5,7 @@
  */
 package aremote;
 
+import com.android.chimpchat.core.PhysicalButton;
 import java.awt.image.BufferedImage;
 
 /**
@@ -17,5 +18,6 @@ BufferedImage getScreenShot();
 int getWidth();
 int getHeight();
 void touch(int x, int y);
+void press(PhysicalButton b);
 
 }
