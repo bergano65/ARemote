@@ -106,6 +106,27 @@ public class AdbDevice implements IDevice {
        return _height;
     }
    
+
+   public void hold (int x, int y, int ms)
+   {
+       _device = GetDevice();
+       if (_device == null)
+       {
+           return;
+       }
+       
+        try {
+            _device.touch(x, y, TouchPressType.DOWN);
+            Thread.sleep(ms);
+                _device.touch(x, y, TouchPressType.UP);
+   
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AdbDevice.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+   }
+   
+  
    public void touch(int x, int y)
    {
        _device = GetDevice();

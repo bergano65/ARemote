@@ -18,6 +18,7 @@ BufferedImage getScreenShot();
 int getWidth();
 int getHeight();
 void touch(int x, int y);
+void hold(int x, int y, int ms);
 void press(PhysicalButton b);
 
 }
