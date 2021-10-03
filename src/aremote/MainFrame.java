@@ -191,7 +191,15 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3)
+        if (e.getButton() == MouseEvent.BUTTON1)
+        {
+         if (e.getClickCount() == 2)
+         {
+            Point p = ScalePoint(e.getPoint());
+            _device.hold(p.x, p.y, 5000);
+         }
+        }
+        else if (e.getButton() == MouseEvent.BUTTON3)
         {
             Point p = ScalePoint(e.getPoint());
             _device.touch(p.x, p.y);
