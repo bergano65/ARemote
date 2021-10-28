@@ -190,7 +190,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
 
         double scaleX = ((double)lW)/(((double)img.getWidth()));
         double scaleY = ((double)lH)/(((double)img.getHeight()));
-
+ 
         Image newImg = img.getScaledInstance(lW, lH, 0);
         ImageIcon icon = new ImageIcon(newImg);
 
@@ -224,7 +224,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
                Thread.sleep(500);
                _device.touch(853, 1718);
 */              
-    _device.type("2128506#");
+    _device.type("~");
            } catch (InterruptedException ex) {
                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
            }

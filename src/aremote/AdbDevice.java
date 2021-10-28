@@ -156,4 +156,15 @@ public class AdbDevice implements IDevice {
        _device.press(b, TouchPressType.DOWN_AND_UP);
 
    }   
+      
+      public  void shell(String cmd)
+      {
+_device.shell(cmd);
+        
+    }
+
+    @Override
+    public void type(String s) {
+        _device.shell("input text " + s);
+    }
         }

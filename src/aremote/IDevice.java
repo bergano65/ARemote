@@ -20,5 +20,7 @@ int getHeight();
 void touch(int x, int y);
 void hold(int x, int y, int ms);
 void press(PhysicalButton b);
+void type(String s);
+void shell(String cmd);
 
 }

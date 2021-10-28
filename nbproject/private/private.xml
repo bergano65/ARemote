@@ -5,6 +5,7 @@
         <group>
             <file>file:/D:/NetBeansProjects/ARemote/src/aremote/MainFrame.java</file>
             <file>file:/D:/NetBeansProjects/ARemote/src/aremote/AdbDevice.java</file>
+            <file>file:/D:/NetBeansProjects/ARemote/src/aremote/IDevice.java</file>
         </group>
     </open-files>
 </project-private>
