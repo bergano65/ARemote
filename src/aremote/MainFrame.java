@@ -12,19 +12,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
+6 * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
 /**
- *
+6 *
  * @author Administrator
  */
 public class MainFrame extends javax.swing.JFrame implements ActionListener, MouseListener
@@ -38,8 +41,15 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
 
     private JButton _backButton;
 
-     /**
-     * Creates new form MainFrame
+
+    private JButton _pwdButton;
+    
+
+    private JButton _typeButton;
+  
+    private JTextArea _txtArea;
+    
+    /* Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
@@ -64,6 +74,28 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
        _backButton.setSize(new Dimension(80, 40));
        _backButton.addActionListener(this);
        this.add(_backButton);
+
+
+      _pwdButton = new JButton();
+ _pwdButton.setText("Password");
+       _pwdButton.setLocation(new Point(550, 170 ));
+       _pwdButton.setSize(new Dimension(80, 40));
+      _pwdButton.addActionListener(this);
+       this.add(_pwdButton);
+       
+       
+      _typeButton = new JButton();
+        _typeButton.setText("Type");
+       _typeButton.setLocation(new Point(550, 220 ));
+       _typeButton.setSize(new Dimension(80, 40));
+      _typeButton.addActionListener(this);
+       this.add(_typeButton);
+       
+       _txtArea = new JTextArea();
+       _txtArea.setLocation(new Point(550, 270 ));
+       _txtArea.setSize(new Dimension(100, 220));
+       this.add(_txtArea);
+
     }
 
     /**
@@ -169,12 +201,47 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
            _device.press(PhysicalButton.HOME);
            
        }
-       else if (source == _backButton)
+              else if (source == _pwdButton)
+       {
+           try {
+               _device.shell("input keyevent 5");
+               Thread.sleep(1500);
+               
+               _device.touch(853, 1481);
+
+               Thread.sleep(1500);               
+/*              
+               Thread.sleep(500);
+               _device.touch(168, 1959);
+               Thread.sleep(500);
+                _device.touch(550,1557);
+               Thread.sleep(500);
+               _device.touch(520,1322);
+               Thread.sleep(500);
+               _device.touch(550, 1709);
+               Thread.sleep(500);
+               _device.touch(872, 1709);
+               Thread.sleep(500);
+               _device.touch(853, 1718);
+*/              
+    _device.type("2128506#");
+           } catch (InterruptedException ex) {
+               Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+else if (source == _backButton)
        {
            _device.press(PhysicalButton.BACK);
+          
+       }
+        else if (source == _typeButton)
+       {
+         String s = _txtArea.getText();
+       
+//           _device.type(s);
            
        }
-       
+      
    }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -201,7 +268,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener, Mou
         }
         else if (e.getButton() == MouseEvent.BUTTON3)
         {
-            Point p = ScalePoint(e.getPoint());
+           Point p = ScalePoint(e.getPoint());
             _device.touch(p.x, p.y);
         }
     }
